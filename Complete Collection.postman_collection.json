@@ -1,0 +1,696 @@
+{
+	"info": {
+		"_postman_id": "fed04cd6-52ca-402c-b041-b5bf3d833a9a",
+		"name": "Complete Collection",
+		"description": "Complete API collection based on Swagger documentation",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "26773436",
+		"_collection_link": "https://planetary-equinox-463052.postman.co/workspace/xam_all~9dc096fb-d5a8-48b8-8ba6-d7525765f92d/collection/26773436-fed04cd6-52ca-402c-b041-b5bf3d833a9a?action=share&source=collection_link&creator=26773436"
+	},
+	"item": [
+		{
+			"name": "Entry Point",
+			"item": [
+				{
+					"name": "Health Check",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url-mv}}/xam",
+							"host": [
+								"{{url-mv}}"
+							],
+							"path": [
+								"xam"
+							]
+						},
+						"description": "Check if the server is running"
+					},
+					"response": []
+				},
+				{
+					"name": "API Documentation",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url-mv}}/xam/doc",
+							"host": [
+								"{{url-mv}}"
+							],
+							"path": [
+								"xam",
+								"doc"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Super Admin",
+					"item": [
+						{
+							"name": "Register Super Admin",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"email\": \"superadmin@example.com\",\n  \"password\": \"SuperAdmin@123\",\n  \"firstName\": \"John\",\n  \"lastName\": \"Doe\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url-mv}}/xam/auth/super-admin/register",
+									"host": [
+										"{{url-mv}}"
+									],
+									"path": [
+										"xam",
+										"auth",
+										"super-admin",
+										"register"
+									]
+								},
+								"description": "Creates a Super Admin account and sends OTP to email for verification"
+							},
+							"response": []
+						},
+						{
+							"name": "Verify Registration OTP",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"email\": \"superadmin@example.com\",\n  \"otp\": \"000000\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url-mv}}/xam/auth/super-admin/register-verify-otp",
+									"host": [
+										"{{url-mv}}"
+									],
+									"path": [
+										"xam",
+										"auth",
+										"super-admin",
+										"register-verify-otp"
+									]
+								},
+								"description": "Completes registration by verifying OTP, activates account, and sets auth cookies"
+							},
+							"response": []
+						},
+						{
+							"name": "Login Super Admin",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"email\": \"superadmin@example.com\",\n  \"password\": \"SuperAdmin@123\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url-mv}}/xam/auth/super-admin/login",
+									"host": [
+										"{{url-mv}}"
+									],
+									"path": [
+										"xam",
+										"auth",
+										"super-admin",
+										"login"
+									]
+								},
+								"description": "Authenticates Super Admin and sends OTP for 2FA"
+							},
+							"response": []
+						},
+						{
+							"name": "Verify Login OTP",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"email\": \"superadmin@example.com\",\n  \"otp\": \"000000\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url-mv}}/xam/auth/super-admin/verify-otp",
+									"host": [
+										"{{url-mv}}"
+									],
+									"path": [
+										"xam",
+										"auth",
+										"super-admin",
+										"verify-otp"
+									]
+								},
+								"description": "Verifies OTP and sets authentication cookies"
+							},
+							"response": []
+						},
+						{
+							"name": "Forgot Password",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"email\": \"superadmin@example.com\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url-mv}}/xam/auth/forgot-password/super-admin",
+									"host": [
+										"{{url-mv}}"
+									],
+									"path": [
+										"xam",
+										"auth",
+										"forgot-password",
+										"super-admin"
+									]
+								},
+								"description": "Sends OTP to Super Admin email for password reset"
+							},
+							"response": []
+						},
+						{
+							"name": "Verify Forgot Password OTP",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"email\": \"superadmin@example.com\",\n  \"otp\": \"000000\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url-mv}}/xam/auth/forgot-password-verify-otp/super-admin",
+									"host": [
+										"{{url-mv}}"
+									],
+									"path": [
+										"xam",
+										"auth",
+										"forgot-password-verify-otp",
+										"super-admin"
+									]
+								},
+								"description": "Verifies OTP and returns reset token"
+							},
+							"response": []
+						},
+						{
+							"name": "Reset Password",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"resetToken\": \"c1f739e7c93c6fbfff5f0988df9a3ca5ca43587f1a9dd99c0f48b35ff25bed95\",\n  \"newPassword\": \"NewPassword@123\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url-mv}}/xam/auth/reset-password/super-admin",
+									"host": [
+										"{{url-mv}}"
+									],
+									"path": [
+										"xam",
+										"auth",
+										"reset-password",
+										"super-admin"
+									]
+								},
+								"description": "Resets password using valid reset token"
+							},
+							"response": []
+						},
+						{
+							"name": "Logout Super Admin",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{access_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{url-mv}}/xam/auth/logout/admin",
+									"host": [
+										"{{url-mv}}"
+									],
+									"path": [
+										"xam",
+										"auth",
+										"logout",
+										"admin"
+									]
+								},
+								"description": "Revoke session tokens and clear cookies"
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "General Auth",
+					"item": [
+						{
+							"name": "Refresh Token",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{url-mv}}/xam/auth/refresh-token",
+									"host": [
+										"{{url-mv}}"
+									],
+									"path": [
+										"xam",
+										"auth",
+										"refresh-token"
+									]
+								},
+								"description": "Generates new access and refresh tokens using refresh token from cookie"
+							},
+							"response": []
+						},
+						{
+							"name": "Get Current User",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{access_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url-mv}}/xam/auth/me",
+									"host": [
+										"{{url-mv}}"
+									],
+									"path": [
+										"xam",
+										"auth",
+										"me"
+									]
+								},
+								"description": "Retrieve currently authenticated user information"
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "User Activities",
+					"item": [
+						{
+							"name": "Get User Activities",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{access_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url-mv}}/xam/auth/activities?page=1&limit=10&sortBy=createdAt&sortOrder=desc",
+									"host": [
+										"{{url-mv}}"
+									],
+									"path": [
+										"xam",
+										"auth",
+										"activities"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "1",
+											"description": "Page number (minimum 1)"
+										},
+										{
+											"key": "limit",
+											"value": "10",
+											"description": "Items per page (minimum 1)"
+										},
+										{
+											"key": "search",
+											"value": "",
+											"description": "Search by email, IP address, device, or browser",
+											"disabled": true
+										},
+										{
+											"key": "userId",
+											"value": "",
+											"description": "Filter by user ID",
+											"disabled": true
+										},
+										{
+											"key": "activityType",
+											"value": "",
+											"description": "Filter by activity type: LOGIN, LOGOUT, FAILED_LOGIN, PASSWORD_RESET, PASSWORD_CHANGE, OTP_VERIFICATION, ACCOUNT_LOCKED, SUSPICIOUS_ACTIVITY",
+											"disabled": true
+										},
+										{
+											"key": "role",
+											"value": "",
+											"description": "Filter by role: ADMIN, SUPER_ADMIN, CUSTOMER",
+											"disabled": true
+										},
+										{
+											"key": "ipAddress",
+											"value": "",
+											"description": "Filter by IP address",
+											"disabled": true
+										},
+										{
+											"key": "isSuccessful",
+											"value": "",
+											"description": "Filter by successful/failed activities (true/false)",
+											"disabled": true
+										},
+										{
+											"key": "isSuspicious",
+											"value": "",
+											"description": "Filter suspicious activities (true/false)",
+											"disabled": true
+										},
+										{
+											"key": "sortBy",
+											"value": "createdAt",
+											"description": "Field to sort by: createdAt, loginAt, logoutAt, duration, email"
+										},
+										{
+											"key": "sortOrder",
+											"value": "desc",
+											"description": "Sort order: asc, desc"
+										},
+										{
+											"key": "dateFrom",
+											"value": "",
+											"description": "Filter by date from (ISO string): 2024-01-01T00:00:00.000Z",
+											"disabled": true
+										},
+										{
+											"key": "dateTo",
+											"value": "",
+											"description": "Filter by date to (ISO string): 2024-12-31T23:59:59.999Z",
+											"disabled": true
+										}
+									]
+								},
+								"description": "Retrieve activity logs with filtering, sorting, and pagination"
+							},
+							"response": []
+						},
+						{
+							"name": "Get User Activity Stats",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{access_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url-mv}}/xam/auth/activities/stats/:userId",
+									"host": [
+										"{{url-mv}}"
+									],
+									"path": [
+										"xam",
+										"auth",
+										"activities",
+										"stats",
+										":userId"
+									],
+									"variable": [
+										{
+											"key": "userId",
+											"value": "user_id_here",
+											"description": "User ID to get statistics for"
+										}
+									]
+								},
+								"description": "Get activity statistics for a specific user"
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Email Templates",
+			"item": [
+				{
+					"name": "Get All Email Templates",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url-mv}}/xam/email-templates",
+							"host": [
+								"{{url-mv}}"
+							],
+							"path": [
+								"xam",
+								"email-templates"
+							]
+						},
+						"description": "Get all email templates"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Email Template by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url-mv}}/xam/email-templates/:id",
+							"host": [
+								"{{url-mv}}"
+							],
+							"path": [
+								"xam",
+								"email-templates",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "template_id_here",
+									"description": "Email template ID"
+								}
+							]
+						},
+						"description": "Get email template by ID"
+					},
+					"response": []
+				},
+				{
+					"name": "Create Email Template",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"OrderConfirmation\",\n  \"subject\": \"Your Order Confirmation\",\n  \"html\": \"<p>Hello {{userName}}, your order {{orderId}} is confirmed.</p>\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url-mv}}/xam/email-templates",
+							"host": [
+								"{{url-mv}}"
+							],
+							"path": [
+								"xam",
+								"email-templates"
+							]
+						},
+						"description": "Create a new email template"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Email Template",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"OrderConfirmation\",\n  \"subject\": \"Your Order Confirmation - Updated\",\n  \"html\": \"<p>Hello {{userName}}, your order {{orderId}} has been confirmed.</p>\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url-mv}}/xam/email-templates/:id",
+							"host": [
+								"{{url-mv}}"
+							],
+							"path": [
+								"xam",
+								"email-templates",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "template_id_here",
+									"description": "Email template ID"
+								}
+							]
+						},
+						"description": "Update an existing email template"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Email Template",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{url-mv}}/xam/email-templates/:id",
+							"host": [
+								"{{url-mv}}"
+							],
+							"path": [
+								"xam",
+								"email-templates",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "template_id_here",
+									"description": "Email template ID"
+								}
+							]
+						},
+						"description": "Delete an email template"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Test Email",
+			"item": [
+				{
+					"name": "Send Test Email",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"to\": \"user@example.com\",\n  \"subject\": \"Test Email\",\n  \"body\": \"This is a test email to verify the email service is working.\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url-mv}}/xam/test-email",
+							"host": [
+								"{{url-mv}}"
+							],
+							"path": [
+								"xam",
+								"test-email"
+							]
+						},
+						"description": "Send a test email"
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "url-mv",
+			"value": "http://210.89.44.183:3333",
+			"type": "string"
+		},
+		{
+			"key": "access_token",
+			"value": "",
+			"type": "string"
+		}
+	]
+}
