@@ -1,0 +1,263 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum AuthType {
+  GOOGLE
+  FACEBOOK
+  GITHUB
+  TWITTER
+  APPLE
+  MICROSOFT
+  YAHOO
+  EMAIL
+  PHONE
+}
+
+enum Role {
+  ADMIN
+  SUPER_ADMIN
+  CUSTOMER
+}
+
+enum AccountStatus {
+  PENDING_VERIFICATION
+  ACTIVE
+  SUSPENDED
+  DELETED
+}
+
+model User {
+  id                   String                @id @default(cuid())
+  email                String?               @unique
+  firstName            String?
+  lastName             String?
+  name                 String?
+  img                  String?
+  authType             AuthType              @default(EMAIL)
+  role                 Role                  @default(CUSTOMER)
+  accountStatus        AccountStatus         @default(PENDING_VERIFICATION)
+  phone                String?               @unique
+  password             String?
+  address              Address[]
+  isActive             Boolean               @default(false)
+  isPhoneVerified      Boolean               @default(false)
+  isEmailVerified      Boolean               @default(false)
+  vendorTermsAccepted  Boolean               @default(false)
+  createdAt            DateTime              @default(now())
+  updatedAt            DateTime              @updatedAt
+  rtHash               String?
+  resetToken           String?
+  resetTokenExpiresAt  DateTime?
+  currentLatitude      Float?
+  currentLongitude     Float?
+  lastLocationUpdate   DateTime?
+  devices              UserDevice[]
+  notificationSettings NotificationSetting[]
+  notifications        Notification[]
+  otpsTargeted         OtpVerification[]     @relation("OTPTarget")
+  otpsVerified         OtpVerification[]     @relation("OTPVerifier")
+  otpsCreated          OtpVerification[]     @relation("OTPCreator")
+  activities           UserActivity[]
+}
+
+model OtpVerification {
+  id            String    @id @default(cuid())
+  email         String?
+  phone         String?
+  otp           String
+  expiresAt     DateTime
+  verified      Boolean   @default(false)
+  isUsed        Boolean   @default(false)
+  attempts      Int       @default(0)
+  maxAttempts   Int       @default(10)
+  purpose       String
+  lastAttemptAt DateTime?
+  verifiedAt    DateTime?
+
+  user   User?   @relation("OTPTarget", fields: [userId], references: [id], onDelete: Cascade)
+  userId String?
+
+  verifiedBy   User?   @relation("OTPVerifier", fields: [verifiedById], references: [id], onDelete: SetNull)
+  verifiedById String?
+
+  createdBy   User?   @relation("OTPCreator", fields: [createdById], references: [id], onDelete: SetNull)
+  createdById String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([email, purpose, isUsed])
+  @@unique([phone, purpose, isUsed])
+  @@index([userId])
+  @@index([expiresAt])
+  @@index([purpose])
+}
+
+model UserDevice {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  deviceToken String   @unique
+  deviceType  String?
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// Add to your schema.prisma
+model UserActivity {
+  id     String  @id @default(cuid())
+  userId String?
+  user   User?   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // Activity details
+  activityType ActivityType
+  email        String?
+  role         Role?
+
+  // Session tracking
+  sessionId String?
+
+  // Network information
+  ipAddress  String?
+  userAgent  String?
+  deviceType String?
+  browser    String?
+  os         String?
+
+  // Location (optional)
+  country String?
+  city    String?
+
+  // Timestamps
+  loginAt  DateTime?
+  logoutAt DateTime?
+  duration Int?
+
+  // Security flags
+  isSuccessful  Boolean @default(true)
+  failureReason String?
+  isSuspicious  Boolean @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+  @@index([activityType])
+  @@index([createdAt])
+  @@index([ipAddress])
+  @@index([isSuccessful])
+}
+
+enum ActivityType {
+  LOGIN
+  LOGOUT
+  FAILED_LOGIN
+  PASSWORD_RESET
+  PASSWORD_CHANGE
+  OTP_VERIFICATION
+  ACCOUNT_LOCKED
+  SUSPICIOUS_ACTIVITY
+}
+
+model NotificationTemplate {
+  id            String                @id @default(cuid())
+  name          String                @unique
+  title         String
+  body          String
+  createdAt     DateTime              @default(now())
+  updatedAt     DateTime              @updatedAt
+  notifications Notification[]
+  settings      NotificationSetting[]
+}
+
+model NotificationSetting {
+  id         String               @id @default(cuid())
+  userId     String
+  user       User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
+  templateId String
+  template   NotificationTemplate @relation(fields: [templateId], references: [id], onDelete: Cascade)
+  enabled    Boolean              @default(true)
+  createdAt  DateTime             @default(now())
+  updatedAt  DateTime             @updatedAt
+
+  @@unique([userId, templateId])
+}
+
+model Notification {
+  id           String               @id @default(cuid())
+  userId       String
+  user         User                 @relation(fields: [userId], references: [id])
+  templateId   String
+  template     NotificationTemplate @relation(fields: [templateId], references: [id], onDelete: Cascade)
+  title        String
+  body         String
+  status       NotificationStatus   @default(PENDING)
+  errorMessage String?
+  createdAt    DateTime             @default(now())
+  sentAt       DateTime?
+  read         Boolean              @default(false)
+}
+
+enum NotificationStatus {
+  PENDING
+  SENT
+  FAILED
+  SKIPPED
+}
+
+enum AddressType {
+  HOME
+  WORK
+  OTHER
+}
+
+model Address {
+  id                     String      @id @default(cuid())
+  pincode                String
+  phoneNumber            String
+  alternatePhoneNumber   String?
+  addressLine            String      @db.Text
+  landmark               String?
+  addressType            AddressType @default(HOME)
+  city                   String
+  district               String
+  name                   String
+  state                  String
+  country                String
+  isDeliverable          Boolean     @default(true)
+  isDefault              Boolean     @default(false)
+  additionalInstructions String?     @db.Text
+  latitude               Float?
+  longitude              Float?
+
+  // Soft delete fields
+  isDeleted Boolean   @default(false)
+  deletedAt DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String
+
+  @@unique([userId, pincode, phoneNumber])
+  @@index([userId, isDefault])
+  @@index([userId, isDeleted])
+}
+
+model EmailTemplate {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  subject   String
+  html      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
