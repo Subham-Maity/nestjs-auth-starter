@@ -40,6 +40,7 @@ import { CommonAuthService, SuperAdminAuthService } from '../service';
 import { JwtAuthGuard } from '../guard';
 import { ReqWithUser } from '../types';
 import { Role } from '@prisma/client';
+import { CookieUtil } from '../../common';
 
 @Controller('auth')
 export class AuthController {
@@ -113,20 +114,11 @@ export class AuthController {
       req,
     );
 
-    // Set tokens in HTTP-only cookies (tokens returned from service)
-    res.cookie('access_token', result.tokens.access_token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
-      maxAge: 2 * 60 * 60 * 1000, // 2 hours
-    });
-
-    res.cookie('refresh_token', result.tokens.refresh_token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
-      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-    });
+    CookieUtil.setAuthTokens(
+      res,
+      result.tokens.access_token,
+      result.tokens.refresh_token,
+    );
 
     return { message: result.message };
   }
@@ -192,19 +184,17 @@ export class AuthController {
     const result = await this.superAdminService.verifyOtpForLogin(dto, req);
 
     // Set tokens in HTTP-only cookies
-    res.cookie('access_token', result.tokens.access_token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
-      maxAge: 2 * 60 * 60 * 1000, // 2 hours
-    });
+    res.cookie(
+      'access_token',
+      result.tokens.access_token,
+      CookieUtil.getOptions('access'),
+    );
+    res.cookie(
+      'refresh_token',
+      result.tokens.refresh_token,
+      CookieUtil.getOptions('refresh'),
+    );
 
-    res.cookie('refresh_token', result.tokens.refresh_token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
-      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-    });
     return { message: result.message };
   }
 
@@ -239,19 +229,16 @@ export class AuthController {
     const tokens = await this.commonService.refreshToken(refreshToken);
 
     // Set new tokens as cookies
-    res.cookie('access_token', tokens.access_token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
-      maxAge: 2 * 60 * 60 * 1000, // 2 hours
-    });
-
-    res.cookie('refresh_token', tokens.refresh_token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
-      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-    });
+    res.cookie(
+      'access_token',
+      tokens.access_token,
+      CookieUtil.getOptions('access'),
+    );
+    res.cookie(
+      'refresh_token',
+      tokens.refresh_token,
+      CookieUtil.getOptions('refresh'),
+    );
 
     return { message: 'Tokens refreshed successfully' };
   }
@@ -307,12 +294,11 @@ export class AuthController {
     const result = await this.superAdminService.verifyForgotPasswordOtp(dto);
 
     // Set reset token in HTTP-only cookie
-    res.cookie('reset_token', result.data.resetToken, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
-      maxAge: 15 * 60 * 1000, // 15 minutes
-    });
+    res.cookie(
+      'reset_token',
+      result.data.resetToken,
+      CookieUtil.getOptions('reset'),
+    );
 
     return result;
   }
@@ -343,7 +329,9 @@ export class AuthController {
     const result = await this.superAdminService.resetPassword(dto);
 
     // Clear reset token cookie
-    res.clearCookie('reset_token');
+    // Clear only reset token
+    const { RESET_TOKEN } = CookieUtil.getCookieNames();
+    res.clearCookie(RESET_TOKEN);
 
     return result;
   }
@@ -421,8 +409,7 @@ export class AuthController {
     await this.superAdminService.logout(req.user.id);
 
     // Clear cookies
-    res.clearCookie('access_token');
-    res.clearCookie('refresh_token');
+    CookieUtil.clearAuthCookies(res);
 
     return { message: 'Logged out successfully' };
   }

@@ -3,9 +3,11 @@ import {
   IsNotEmpty,
   IsString,
   Matches,
+  MaxLength,
   MinLength,
 } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
+import { Transform } from 'class-transformer';
 
 export class SuperAdminRegisterDto {
   @ApiProperty({
@@ -40,6 +42,8 @@ export class SuperAdminRegisterDto {
   })
   @IsString()
   @IsNotEmpty()
+  @Transform(({ value }) => value?.trim())
+  @MaxLength(50)
   firstName: string;
 
   @ApiProperty({
@@ -48,6 +52,8 @@ export class SuperAdminRegisterDto {
   })
   @IsString()
   @IsNotEmpty()
+  @Transform(({ value }) => value?.trim())
+  @MaxLength(50)
   lastName: string;
 }
 

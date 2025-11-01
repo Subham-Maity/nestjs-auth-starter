@@ -1,7 +1,6 @@
 import {
   BadRequestException,
   Injectable,
-  InternalServerErrorException,
   Logger,
   UnauthorizedException,
 } from '@nestjs/common';
@@ -55,7 +54,6 @@ export class CommonAuthService {
       img: user.img || undefined,
       address: addressInfo.address,
       addressId: addressInfo.addressId,
-      deviceToken: user.deviceToken,
     };
 
     const [accessToken, refreshToken] = await Promise.all([
@@ -122,7 +120,16 @@ export class CommonAuthService {
       };
     } catch (error) {
       if (error instanceof UnauthorizedException) throw error;
-      throw new InternalServerErrorException('Error processing refresh token');
+
+      if (error.name === 'TokenExpiredError') {
+        throw new UnauthorizedException('Refresh token expired');
+      }
+      if (error.name === 'JsonWebTokenError') {
+        throw new UnauthorizedException('Invalid refresh token');
+      }
+
+      this.logger.error('Refresh token error:', error);
+      throw new UnauthorizedException('Token validation failed');
     }
   }
 

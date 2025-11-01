@@ -52,29 +52,25 @@ export class CommonAuthRepository {
     userId?: string,
     createdById?: string,
   ) {
-    // Delete any existing OTPs for this email/purpose combination
-    await this.prisma.otpVerification.deleteMany({
-      where: {
-        email,
-        purpose,
-        isUsed: false,
-      },
-    });
+    return this.prisma.$transaction(async (tx) => {
+      await tx.otpVerification.deleteMany({
+        where: { email, purpose, isUsed: false },
+      });
 
-    // Create new OTP
-    return this.prisma.otpVerification.create({
-      data: {
-        email,
-        otp,
-        expiresAt,
-        purpose,
-        userId,
-        createdById,
-        isUsed: false,
-        verified: false,
-        attempts: 0,
-        maxAttempts: 10,
-      },
+      return tx.otpVerification.create({
+        data: {
+          email,
+          otp,
+          expiresAt,
+          purpose,
+          userId,
+          createdById,
+          isUsed: false,
+          verified: false,
+          attempts: 0,
+          maxAttempts: 10,
+        },
+      });
     });
   }
 
