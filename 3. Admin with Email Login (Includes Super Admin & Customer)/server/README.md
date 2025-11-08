@@ -1,0 +1,5 @@
+- Install Docker and run `docker daemon`
+- `docker-compose up -d`
+- `docker compose up dev-db -d`
+- `docker ps`
+- `docker logs <CONTAINER ID>`

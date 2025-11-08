@@ -1,0 +1,1768 @@
+{
+  "openapi": "3.0.0",
+  "paths": {
+    "/xam": {
+      "get": {
+        "description": "https://..../xam <- You can use this link to check if the server is running.",
+        "operationId": "AppController_getHello",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Returns a simple message."
+          }
+        },
+        "summary": "Entry Point",
+        "tags": [
+          "Entry Point"
+        ]
+      }
+    },
+    "/xam/doc": {
+      "get": {
+        "operationId": "AppController_redoc",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Entry Point"
+        ]
+      }
+    },
+    "/xam/auth/super-admin/register": {
+      "post": {
+        "description": "Creates a Super Admin account and sends OTP to email for verification",
+        "operationId": "AuthController_registerSuperAdmin",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SuperAdminRegisterDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Registration successful. OTP sent to email.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SuperAdminRegisterResponseDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Email already registered or invalid input"
+          }
+        },
+        "summary": "Register a new Super Admin",
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/xam/auth/super-admin/register-verify-otp": {
+      "post": {
+        "description": "Completes registration by verifying OTP, activates account, and sets auth cookies",
+        "operationId": "AuthController_verifyRegistrationOtpSuperAdmin",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VerifyOtpSuperAdminDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OTP verified successfully. Registration completed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Email verified successfully. Your account is now active."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid or expired OTP"
+          }
+        },
+        "summary": "Verify OTP for Super Admin registration",
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/xam/auth/super-admin/login": {
+      "post": {
+        "description": "Authenticates Super Admin and sends OTP for 2FA",
+        "operationId": "AuthController_loginSuperAdmin",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SuperAdminLoginDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OTP sent to your email",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SuperAdminLoginResponseDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid credentials or not a Super Admin"
+          }
+        },
+        "summary": "Login Super Admin",
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/xam/auth/super-admin/verify-otp": {
+      "post": {
+        "description": "Verifies OTP and sets authentication cookies",
+        "operationId": "AuthController_verifyLoginOtpSuperAdmin",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VerifyOtpSuperAdminDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OTP verified successfully. Login completed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Login successful"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid or expired OTP"
+          }
+        },
+        "summary": "Verify OTP for Super Admin login",
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/xam/auth/forgot-password/super-admin": {
+      "post": {
+        "description": "Sends OTP to Super Admin email for password reset",
+        "operationId": "AuthController_forgotPasswordSuperAdmin",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ForgotPasswordSuperAdminDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OTP sent to your email",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ForgotPasswordSuperAdminResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Super Admin not found"
+          }
+        },
+        "summary": "Initiate forgot password for Super Admin",
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/xam/auth/forgot-password-verify-otp/super-admin": {
+      "post": {
+        "description": "Verifies OTP and returns reset token",
+        "operationId": "AuthController_verifyForgotPasswordOtpSuperAdmin",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VerifyOtpSuperAdminDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OTP verified successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ForgotPasswordVerifyOtpSuperAdminResponseDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid or expired OTP"
+          }
+        },
+        "summary": "Verify OTP for forgot password",
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/xam/auth/reset-password/super-admin": {
+      "post": {
+        "description": "Resets password using valid reset token",
+        "operationId": "AuthController_resetPasswordSuperAdmin",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ResetPasswordSuperAdminDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Password reset successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResetPasswordSuperAdminResponseDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid or expired reset token"
+          }
+        },
+        "summary": "Reset password for Super Admin",
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/xam/auth/logout/super-admin": {
+      "post": {
+        "description": "Revoke session tokens and clear cookies",
+        "operationId": "AuthController_logoutSuperAdmin",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Logged out successfully"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Logout Super Admin",
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/xam/auth/activities": {
+      "get": {
+        "description": "Retrieve activity logs with filtering, sorting, and pagination",
+        "operationId": "AuthController_getUserActivities",
+        "parameters": [
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "minimum": 1,
+              "default": 1,
+              "type": "number"
+            }
+          },
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "minimum": 1,
+              "default": 10,
+              "type": "number"
+            }
+          },
+          {
+            "name": "search",
+            "required": false,
+            "in": "query",
+            "description": "Search by email, IP address, device, or browser",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "userId",
+            "required": false,
+            "in": "query",
+            "description": "Filter by user ID",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "activityType",
+            "required": false,
+            "in": "query",
+            "description": "Filter by activity type",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "LOGIN",
+                "LOGOUT",
+                "FAILED_LOGIN",
+                "PASSWORD_RESET",
+                "PASSWORD_CHANGE",
+                "OTP_VERIFICATION",
+                "ACCOUNT_LOCKED",
+                "SUSPICIOUS_ACTIVITY"
+              ]
+            }
+          },
+          {
+            "name": "role",
+            "required": false,
+            "in": "query",
+            "description": "Filter by role",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "ADMIN",
+                "SUPER_ADMIN",
+                "CUSTOMER"
+              ]
+            }
+          },
+          {
+            "name": "ipAddress",
+            "required": false,
+            "in": "query",
+            "description": "Filter by IP address",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "isSuccessful",
+            "required": false,
+            "in": "query",
+            "description": "Filter by successful/failed activities",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "isSuspicious",
+            "required": false,
+            "in": "query",
+            "description": "Filter suspicious activities",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "sortBy",
+            "required": false,
+            "in": "query",
+            "description": "Field to sort by",
+            "schema": {
+              "example": "createdAt",
+              "type": "string",
+              "enum": [
+                "createdAt",
+                "loginAt",
+                "logoutAt",
+                "duration",
+                "email"
+              ]
+            }
+          },
+          {
+            "name": "sortOrder",
+            "required": false,
+            "in": "query",
+            "description": "Sort order",
+            "schema": {
+              "example": "desc",
+              "type": "string",
+              "enum": [
+                "asc",
+                "desc"
+              ]
+            }
+          },
+          {
+            "name": "dateFrom",
+            "required": false,
+            "in": "query",
+            "description": "Filter by date from (ISO string)",
+            "schema": {
+              "example": "2024-01-01T00:00:00.000Z",
+              "type": "string"
+            }
+          },
+          {
+            "name": "dateTo",
+            "required": false,
+            "in": "query",
+            "description": "Filter by date to (ISO string)",
+            "schema": {
+              "example": "2024-12-31T23:59:59.999Z",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Activity logs retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserActivityListResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Get user activity logs",
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/xam/auth/activities/stats/{userId}": {
+      "get": {
+        "description": "Get activity statistics for a specific user",
+        "operationId": "AuthController_getUserActivityStats",
+        "parameters": [
+          {
+            "name": "userId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Get user activity statistics",
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/xam/auth/customer/register": {
+      "post": {
+        "description": "Creates a Customer account and sends OTP to email for verification",
+        "operationId": "AuthController_registerCustomer",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CustomerRegisterDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Registration successful. OTP sent to email.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomerRegisterResponseDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Email already registered or invalid input"
+          }
+        },
+        "summary": "Register a new Customer",
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/xam/auth/customer/register-verify-otp": {
+      "post": {
+        "description": "Completes registration by verifying OTP, activates account, and sets auth cookies",
+        "operationId": "AuthController_verifyRegistrationOtpCustomer",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VerifyOtpCustomerDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OTP verified successfully. Registration completed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Email verified successfully. Your account is now active."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid or expired OTP"
+          }
+        },
+        "summary": "Verify OTP for Customer registration",
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/xam/auth/customer/login": {
+      "post": {
+        "description": "Authenticates Customer with email/password (sends OTP) or redirects to Google OAuth",
+        "operationId": "AuthController_loginCustomer",
+        "parameters": [
+          {
+            "name": "provider",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CustomerLoginDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OTP sent to your email (email/password login)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomerLoginResponseDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid credentials"
+          }
+        },
+        "summary": "Login Customer",
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/xam/auth/customer/login/google": {
+      "get": {
+        "description": "Redirects to Google for authentication",
+        "operationId": "AuthController_googleAuth",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Initiate Google OAuth login",
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/xam/auth/customer/google/callback": {
+      "get": {
+        "description": "Handles Google OAuth callback and sets authentication cookies",
+        "operationId": "AuthController_googleAuthCallback",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Google OAuth callback",
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/xam/auth/customer/verify-otp": {
+      "post": {
+        "description": "Verifies OTP and sets authentication cookies",
+        "operationId": "AuthController_verifyLoginOtpCustomer",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VerifyOtpCustomerDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OTP verified successfully. Login completed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Login successful"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid or expired OTP"
+          }
+        },
+        "summary": "Verify OTP for Customer login",
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/xam/auth/forgot-password/customer": {
+      "post": {
+        "description": "Sends OTP to Customer email for password reset",
+        "operationId": "AuthController_forgotPasswordCustomer",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ForgotPasswordCustomerDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OTP sent to your email",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ForgotPasswordCustomerResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Customer not found"
+          }
+        },
+        "summary": "Initiate forgot password for Customer",
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/xam/auth/forgot-password-verify-otp/customer": {
+      "post": {
+        "description": "Verifies OTP and returns reset token",
+        "operationId": "AuthController_verifyForgotPasswordOtpCustomer",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VerifyOtpCustomerDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OTP verified successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ForgotPasswordVerifyOtpCustomerResponseDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid or expired OTP"
+          }
+        },
+        "summary": "Verify OTP for forgot password",
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/xam/auth/reset-password/customer": {
+      "post": {
+        "description": "Resets password using valid reset token",
+        "operationId": "AuthController_resetPasswordCustomer",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ResetPasswordCustomerDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Password reset successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResetPasswordCustomerResponseDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid or expired reset token"
+          }
+        },
+        "summary": "Reset password for Customer",
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/xam/auth/logout/customer": {
+      "post": {
+        "description": "Revoke session tokens and clear cookies",
+        "operationId": "AuthController_logoutCustomer",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Logged out successfully"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Logout Customer",
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/xam/auth/me": {
+      "get": {
+        "description": "Retrieve currently authenticated user information",
+        "operationId": "AuthController_me",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Current user information retrieved successfully"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Get current user",
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/xam/auth/refresh-token": {
+      "post": {
+        "description": "Generates new access and refresh tokens using refresh token from cookie",
+        "operationId": "AuthController_refreshToken",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Tokens refreshed successfully"
+          },
+          "401": {
+            "description": "Invalid refresh token"
+          }
+        },
+        "summary": "Refresh access token",
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/xam/email-templates": {
+      "get": {
+        "operationId": "EmailTemplateController_getAllTemplates",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "List of email templates",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/EmailTemplateDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "summary": "Get all email templates",
+        "tags": [
+          "Email Templates"
+        ]
+      },
+      "post": {
+        "operationId": "EmailTemplateController_createEmailTemplate",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateEmailTemplateDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Email template created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EmailTemplateDto"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Create a new email template",
+        "tags": [
+          "Email Templates"
+        ]
+      }
+    },
+    "/xam/email-templates/{id}": {
+      "get": {
+        "operationId": "EmailTemplateController_getTemplateById",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Email template details",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EmailTemplateDto"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Get email template by ID",
+        "tags": [
+          "Email Templates"
+        ]
+      },
+      "put": {
+        "operationId": "EmailTemplateController_updateTemplate",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateEmailTemplateDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Email template updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EmailTemplateDto"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Update an existing email template",
+        "tags": [
+          "Email Templates"
+        ]
+      },
+      "delete": {
+        "operationId": "EmailTemplateController_deleteTemplate",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Email template deleted"
+          }
+        },
+        "summary": "Delete an email template",
+        "tags": [
+          "Email Templates"
+        ]
+      }
+    },
+    "/xam/test-email": {
+      "post": {
+        "operationId": "TestEmailController_sendTestEmail",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SendTestEmailDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Test email sent successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Test email sent successfully"
+                    },
+                    "to": {
+                      "type": "string",
+                      "example": "user@example.com"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request - validation failed"
+          },
+          "500": {
+            "description": "Failed to send email"
+          }
+        },
+        "summary": "Send a test email",
+        "tags": [
+          "Test Email"
+        ]
+      }
+    }
+  },
+  "info": {
+    "title": "THIS BACKEND MADE BY SUBHAM MAITY",
+    "description": "THIS APP IS MADE FOR GROCERY STORE",
+    "version": "1.0.0",
+    "contact": {
+      "name": "SUBHAM MAITY",
+      "url": "https://github.com/Subham-Maity",
+      "email": "maitysubham4041@gmail.com"
+    },
+    "license": {
+      "name": "MIT",
+      "url": "https://opensource.org/licenses/MIT"
+    }
+  },
+  "tags": [
+    {
+      "name": "subham-xam",
+      "description": "Developer of this app"
+    }
+  ],
+  "servers": [
+    {
+      "url": "http://localhost:3333",
+      "description": "Local server (development)"
+    },
+    {
+      "url": "http://210.89.44.183:3333/xam",
+      "description": "Staging server (testing)"
+    },
+    {
+      "url": "http://210.89.44.183:3333/xam",
+      "description": "Production server (live)"
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "bearer": {
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "type": "http"
+      }
+    },
+    "schemas": {
+      "SuperAdminRegisterDto": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "Super Admin email address",
+            "example": "superadmin@example.com"
+          },
+          "password": {
+            "type": "string",
+            "description": "Password must include at least one lowercase letter, one uppercase letter, one number, and one special character",
+            "example": "SuperAdmin@123",
+            "minLength": 8
+          },
+          "firstName": {
+            "type": "string",
+            "description": "First name of the super admin",
+            "example": "John"
+          },
+          "lastName": {
+            "type": "string",
+            "description": "Last name of the super admin",
+            "example": "Doe"
+          }
+        },
+        "required": [
+          "email",
+          "password",
+          "firstName",
+          "lastName"
+        ]
+      },
+      "SuperAdminRegisterResponseDto": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "Success message",
+            "example": "Registration successful. OTP sent to your email."
+          },
+          "superAdmin": {
+            "type": "object",
+            "description": "Super Admin details",
+            "example": {
+              "id": "cuid123",
+              "email": "superadmin@example.com",
+              "firstName": "John",
+              "lastName": "Doe",
+              "role": "SUPER_ADMIN"
+            }
+          }
+        },
+        "required": [
+          "message",
+          "superAdmin"
+        ]
+      },
+      "VerifyOtpSuperAdminDto": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "Email address for OTP verification",
+            "example": "superadmin@example.com"
+          },
+          "otp": {
+            "type": "string",
+            "description": "OTP code sent to email",
+            "example": "123456"
+          }
+        },
+        "required": [
+          "email",
+          "otp"
+        ]
+      },
+      "SuperAdminLoginDto": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "Super Admin email address",
+            "example": "superadmin@example.com"
+          },
+          "password": {
+            "type": "string",
+            "description": "Super Admin password",
+            "example": "SuperAdmin@123"
+          }
+        },
+        "required": [
+          "email",
+          "password"
+        ]
+      },
+      "SuperAdminLoginResponseDto": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "Success message indicating OTP has been sent",
+            "example": "OTP sent to your email"
+          }
+        },
+        "required": [
+          "message"
+        ]
+      },
+      "ForgotPasswordSuperAdminDto": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "Super Admin email address",
+            "example": "superadmin@example.com"
+          }
+        },
+        "required": [
+          "email"
+        ]
+      },
+      "ForgotPasswordSuperAdminResponseDto": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "Success message",
+            "example": "OTP sent to your email for password reset"
+          }
+        },
+        "required": [
+          "message"
+        ]
+      },
+      "ForgotPasswordVerifyOtpSuperAdminResponseDto": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "Success message",
+            "example": "OTP verified successfully"
+          },
+          "data": {
+            "type": "object",
+            "description": "Reset token data",
+            "example": {
+              "resetToken": "abc123xyz..."
+            }
+          }
+        },
+        "required": [
+          "message",
+          "data"
+        ]
+      },
+      "ResetPasswordSuperAdminDto": {
+        "type": "object",
+        "properties": {
+          "resetToken": {
+            "type": "string",
+            "description": "Reset token received after OTP verification",
+            "example": "abc123xyz..."
+          },
+          "newPassword": {
+            "type": "string",
+            "description": "New password (minimum 8 characters with complexity requirements)",
+            "example": "NewPassword@123",
+            "minLength": 8
+          }
+        },
+        "required": [
+          "resetToken",
+          "newPassword"
+        ]
+      },
+      "ResetPasswordSuperAdminResponseDto": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "Success message",
+            "example": "Password reset successfully"
+          }
+        },
+        "required": [
+          "message"
+        ]
+      },
+      "UserActivityResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "userId": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string",
+            "enum": [
+              "ADMIN",
+              "SUPER_ADMIN",
+              "CUSTOMER"
+            ]
+          },
+          "activityType": {
+            "type": "string",
+            "enum": [
+              "LOGIN",
+              "LOGOUT",
+              "FAILED_LOGIN",
+              "PASSWORD_RESET",
+              "PASSWORD_CHANGE",
+              "OTP_VERIFICATION",
+              "ACCOUNT_LOCKED",
+              "SUSPICIOUS_ACTIVITY"
+            ]
+          },
+          "sessionId": {
+            "type": "string"
+          },
+          "ipAddress": {
+            "type": "string"
+          },
+          "userAgent": {
+            "type": "string"
+          },
+          "deviceType": {
+            "type": "string"
+          },
+          "browser": {
+            "type": "string"
+          },
+          "os": {
+            "type": "string"
+          },
+          "country": {
+            "type": "string"
+          },
+          "city": {
+            "type": "string"
+          },
+          "loginAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "logoutAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "duration": {
+            "type": "number"
+          },
+          "isSuccessful": {
+            "type": "boolean"
+          },
+          "failureReason": {
+            "type": "string"
+          },
+          "isSuspicious": {
+            "type": "boolean"
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "updatedAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "user": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "id",
+          "userId",
+          "activityType",
+          "isSuccessful",
+          "isSuspicious",
+          "createdAt",
+          "updatedAt"
+        ]
+      },
+      "UserActivityListResponseDto": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/UserActivityResponseDto"
+            }
+          },
+          "total": {
+            "type": "number"
+          },
+          "page": {
+            "type": "number"
+          },
+          "limit": {
+            "type": "number"
+          },
+          "totalPages": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "data",
+          "total",
+          "page",
+          "limit",
+          "totalPages"
+        ]
+      },
+      "CustomerRegisterDto": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "Customer email address",
+            "example": "customer@example.com"
+          },
+          "password": {
+            "type": "string",
+            "description": "Password must include at least one lowercase letter, one uppercase letter, one number, and one special character",
+            "example": "Customer@123",
+            "minLength": 8
+          },
+          "firstName": {
+            "type": "string",
+            "description": "First name of the customer",
+            "example": "John"
+          },
+          "lastName": {
+            "type": "string",
+            "description": "Last name of the customer",
+            "example": "Doe"
+          },
+          "phone": {
+            "type": "string",
+            "description": "Phone number (optional)",
+            "example": "+1234567890"
+          }
+        },
+        "required": [
+          "email",
+          "password",
+          "firstName",
+          "lastName"
+        ]
+      },
+      "CustomerRegisterResponseDto": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "Success message",
+            "example": "Registration successful. OTP sent to your email."
+          },
+          "customer": {
+            "type": "object",
+            "description": "Customer details",
+            "example": {
+              "id": "cuid123",
+              "email": "customer@example.com",
+              "firstName": "John",
+              "lastName": "Doe",
+              "role": "CUSTOMER"
+            }
+          }
+        },
+        "required": [
+          "message",
+          "customer"
+        ]
+      },
+      "VerifyOtpCustomerDto": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "Email address for OTP verification",
+            "example": "customer@example.com"
+          },
+          "otp": {
+            "type": "string",
+            "description": "OTP code sent to email",
+            "example": "123456"
+          }
+        },
+        "required": [
+          "email",
+          "otp"
+        ]
+      },
+      "CustomerLoginDto": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "Customer email address",
+            "example": "customer@example.com"
+          },
+          "password": {
+            "type": "string",
+            "description": "Customer password",
+            "example": "Customer@123"
+          }
+        },
+        "required": [
+          "email",
+          "password"
+        ]
+      },
+      "CustomerLoginResponseDto": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "Success message indicating OTP has been sent",
+            "example": "OTP sent to your email"
+          }
+        },
+        "required": [
+          "message"
+        ]
+      },
+      "ForgotPasswordCustomerDto": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "Customer email address",
+            "example": "customer@example.com"
+          }
+        },
+        "required": [
+          "email"
+        ]
+      },
+      "ForgotPasswordCustomerResponseDto": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "Success message",
+            "example": "OTP sent to your email for password reset"
+          }
+        },
+        "required": [
+          "message"
+        ]
+      },
+      "ForgotPasswordVerifyOtpCustomerResponseDto": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "Success message",
+            "example": "OTP verified successfully"
+          },
+          "data": {
+            "type": "object",
+            "description": "Reset token data",
+            "example": {
+              "resetToken": "abc123xyz..."
+            }
+          }
+        },
+        "required": [
+          "message",
+          "data"
+        ]
+      },
+      "ResetPasswordCustomerDto": {
+        "type": "object",
+        "properties": {
+          "resetToken": {
+            "type": "string",
+            "description": "Reset token received after OTP verification",
+            "example": "abc123xyz..."
+          },
+          "newPassword": {
+            "type": "string",
+            "description": "New password (minimum 8 characters with complexity requirements)",
+            "example": "NewPassword@123",
+            "minLength": 8
+          }
+        },
+        "required": [
+          "resetToken",
+          "newPassword"
+        ]
+      },
+      "ResetPasswordCustomerResponseDto": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "Success message",
+            "example": "Password reset successfully"
+          }
+        },
+        "required": [
+          "message"
+        ]
+      },
+      "EmailTemplateDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "ID of the email template",
+            "example": "clabc123"
+          },
+          "name": {
+            "type": "string",
+            "description": "Unique name of the email template",
+            "example": "OrderConfirmation"
+          },
+          "subject": {
+            "type": "string",
+            "description": "Subject of the email",
+            "example": "Your Order Confirmation"
+          },
+          "html": {
+            "type": "string",
+            "description": "HTML content with placeholders",
+            "example": "<p>Hello {{userName}}, your order {{orderId}} is confirmed.</p>"
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string",
+            "description": "Creation timestamp",
+            "example": "2023-01-01T00:00:00Z"
+          },
+          "updatedAt": {
+            "format": "date-time",
+            "type": "string",
+            "description": "Last update timestamp",
+            "example": "2023-01-01T00:00:00Z"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "subject",
+          "html",
+          "createdAt",
+          "updatedAt"
+        ]
+      },
+      "CreateEmailTemplateDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Unique name of the email template",
+            "example": "OrderConfirmation"
+          },
+          "subject": {
+            "type": "string",
+            "description": "Subject of the email",
+            "example": "Your Order Confirmation"
+          },
+          "html": {
+            "type": "string",
+            "description": "HTML content with placeholders",
+            "example": "<p>Hello {{userName}}, your order {{orderId}} is confirmed.</p>"
+          }
+        },
+        "required": [
+          "name",
+          "subject",
+          "html"
+        ]
+      },
+      "UpdateEmailTemplateDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Unique name of the email template",
+            "example": "OrderConfirmation"
+          },
+          "subject": {
+            "type": "string",
+            "description": "Subject of the email",
+            "example": "Your Order Confirmation"
+          },
+          "html": {
+            "type": "string",
+            "description": "HTML content with placeholders",
+            "example": "<p>Hello {{userName}}, your order {{orderId}} is confirmed.</p>"
+          }
+        }
+      },
+      "SendTestEmailDto": {
+        "type": "object",
+        "properties": {
+          "to": {
+            "type": "string",
+            "description": "Recipient email address",
+            "example": "user@example.com"
+          },
+          "subject": {
+            "type": "string",
+            "description": "Email subject",
+            "example": "Test Email",
+            "default": "Test Email from API"
+          },
+          "body": {
+            "type": "string",
+            "description": "Email body content",
+            "example": "This is a test email to verify the email service is working."
+          }
+        },
+        "required": [
+          "to",
+          "body"
+        ]
+      }
+    }
+  }
+}

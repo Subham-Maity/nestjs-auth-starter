@@ -1,11 +1,11 @@
 {
 	"info": {
-		"_postman_id": "fed04cd6-52ca-402c-b041-b5bf3d833a9a",
-		"name": "Complete Collection",
+		"_postman_id": "",
+		"name": "Auth",
 		"description": "Complete API collection based on Swagger documentation",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "26773436",
-		"_collection_link": "https://planetary-equinox-463052.postman.co/workspace/xam_all~9dc096fb-d5a8-48b8-8ba6-d7525765f92d/collection/26773436-fed04cd6-52ca-402c-b041-b5bf3d833a9a?action=share&source=collection_link&creator=26773436"
+		"_exporter_id": "",
+		"_collection_link": ""
 	},
 	"item": [
 		{
@@ -242,7 +242,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n  \"resetToken\": \"c1f739e7c93c6fbfff5f0988df9a3ca5ca43587f1a9dd99c0f48b35ff25bed95\",\n  \"newPassword\": \"NewPassword@123\"\n}",
+									"raw": "{\n  \"resetToken\": \"70bd38d505c9885b2825322bd0de9734dca53b408bef39d63855f034c027433a\",\n  \"newPassword\": \"NewPassword@123\"\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -281,6 +281,252 @@
 								"method": "POST",
 								"header": [],
 								"url": {
+									"raw": "{{url-mv}}/xam/auth/logout/super-admin",
+									"host": [
+										"{{url-mv}}"
+									],
+									"path": [
+										"xam",
+										"auth",
+										"logout",
+										"super-admin"
+									]
+								},
+								"description": "Revoke session tokens and clear cookies"
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Admin",
+					"item": [
+						{
+							"name": "Register Admin",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"email\": \"admin1@example.com\",\n  \"password\": \"Admin1@123\",\n  \"firstName\": \"John\",\n  \"lastName\": \"Doe\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url-mv}}/xam/auth/admin/register",
+									"host": [
+										"{{url-mv}}"
+									],
+									"path": [
+										"xam",
+										"auth",
+										"admin",
+										"register"
+									]
+								},
+								"description": "Creates a Super Admin account and sends OTP to email for verification"
+							},
+							"response": []
+						},
+						{
+							"name": "Verify Registration OTP",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"email\": \"admin1@example.com\",\n  \"otp\": \"000000\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url-mv}}/xam/auth/admin/register-verify-otp",
+									"host": [
+										"{{url-mv}}"
+									],
+									"path": [
+										"xam",
+										"auth",
+										"admin",
+										"register-verify-otp"
+									]
+								},
+								"description": "Completes registration by verifying OTP, activates account, and sets auth cookies"
+							},
+							"response": []
+						},
+						{
+							"name": "Login Admin",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"email\": \"admin1@example.com\",\n  \"password\": \"NewPassword@123\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url-mv}}/xam/auth/admin/login",
+									"host": [
+										"{{url-mv}}"
+									],
+									"path": [
+										"xam",
+										"auth",
+										"admin",
+										"login"
+									]
+								},
+								"description": "Authenticates Super Admin and sends OTP for 2FA"
+							},
+							"response": []
+						},
+						{
+							"name": "Verify Login OTP",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"email\": \"admin1@example.com\",\n  \"otp\": \"000000\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url-mv}}/xam/auth/admin/verify-otp",
+									"host": [
+										"{{url-mv}}"
+									],
+									"path": [
+										"xam",
+										"auth",
+										"admin",
+										"verify-otp"
+									]
+								},
+								"description": "Verifies OTP and sets authentication cookies"
+							},
+							"response": []
+						},
+						{
+							"name": "Forgot Password",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"email\": \"admin1@example.com\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url-mv}}/xam/auth/forgot-password/admin",
+									"host": [
+										"{{url-mv}}"
+									],
+									"path": [
+										"xam",
+										"auth",
+										"forgot-password",
+										"admin"
+									]
+								},
+								"description": "Sends OTP to Super Admin email for password reset"
+							},
+							"response": []
+						},
+						{
+							"name": "Verify Forgot Password OTP",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"email\": \"admin1@example.com\",\n  \"otp\": \"000000\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url-mv}}/xam/auth/forgot-password-verify-otp/admin",
+									"host": [
+										"{{url-mv}}"
+									],
+									"path": [
+										"xam",
+										"auth",
+										"forgot-password-verify-otp",
+										"admin"
+									]
+								},
+								"description": "Verifies OTP and returns reset token"
+							},
+							"response": []
+						},
+						{
+							"name": "Reset Password",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"resetToken\": \"00b0ef22127c59f2911e2a42ccdb4c56ad8850ba2a7a4954858cc7fe55c7f1f7\",\n  \"newPassword\": \"NewPassword@123\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url-mv}}/xam/auth/reset-password/admin",
+									"host": [
+										"{{url-mv}}"
+									],
+									"path": [
+										"xam",
+										"auth",
+										"reset-password",
+										"admin"
+									]
+								},
+								"description": "Resets password using valid reset token"
+							},
+							"response": []
+						},
+						{
+							"name": "Logout Super Admin",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{access_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"url": {
 									"raw": "{{url-mv}}/xam/auth/logout/admin",
 									"host": [
 										"{{url-mv}}"
@@ -290,6 +536,252 @@
 										"auth",
 										"logout",
 										"admin"
+									]
+								},
+								"description": "Revoke session tokens and clear cookies"
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Customer",
+					"item": [
+						{
+							"name": "Register Customer",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"email\": \"customer1@example.com\",\n  \"password\": \"Customer1@123\",\n  \"firstName\": \"JohnC\",\n  \"lastName\": \"DoeC\",\n  \"phone\" : \"+919933515901\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url-mv}}/xam/auth/customer/register",
+									"host": [
+										"{{url-mv}}"
+									],
+									"path": [
+										"xam",
+										"auth",
+										"customer",
+										"register"
+									]
+								},
+								"description": "Creates a Super Admin account and sends OTP to email for verification"
+							},
+							"response": []
+						},
+						{
+							"name": "Verify Registration OTP",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"email\": \"customer1@example.com\",\n  \"otp\": \"000000\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url-mv}}/xam/auth/customer/register-verify-otp",
+									"host": [
+										"{{url-mv}}"
+									],
+									"path": [
+										"xam",
+										"auth",
+										"customer",
+										"register-verify-otp"
+									]
+								},
+								"description": "Completes registration by verifying OTP, activates account, and sets auth cookies"
+							},
+							"response": []
+						},
+						{
+							"name": "Login Customer",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"email\": \"customer1@example.com\",\n  \"password\": \"Customer1@123\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url-mv}}/xam/auth/customer/login",
+									"host": [
+										"{{url-mv}}"
+									],
+									"path": [
+										"xam",
+										"auth",
+										"customer",
+										"login"
+									]
+								},
+								"description": "Authenticates Super Admin and sends OTP for 2FA"
+							},
+							"response": []
+						},
+						{
+							"name": "Verify Login OTP",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"email\": \"customer1@example.com\",\n  \"otp\": \"000000\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url-mv}}/xam/auth/customer/verify-otp",
+									"host": [
+										"{{url-mv}}"
+									],
+									"path": [
+										"xam",
+										"auth",
+										"customer",
+										"verify-otp"
+									]
+								},
+								"description": "Verifies OTP and sets authentication cookies"
+							},
+							"response": []
+						},
+						{
+							"name": "Forgot Password",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"email\": \"customer1@example.com\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url-mv}}/xam/auth/forgot-password/customer",
+									"host": [
+										"{{url-mv}}"
+									],
+									"path": [
+										"xam",
+										"auth",
+										"forgot-password",
+										"customer"
+									]
+								},
+								"description": "Sends OTP to Super Admin email for password reset"
+							},
+							"response": []
+						},
+						{
+							"name": "Verify Forgot Password OTP",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"email\": \"customer1@example.com\",\n  \"otp\": \"000000\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url-mv}}/xam/auth/forgot-password-verify-otp/customer",
+									"host": [
+										"{{url-mv}}"
+									],
+									"path": [
+										"xam",
+										"auth",
+										"forgot-password-verify-otp",
+										"customer"
+									]
+								},
+								"description": "Verifies OTP and returns reset token"
+							},
+							"response": []
+						},
+						{
+							"name": "Reset Password",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"resetToken\": \"c2bd471f04d7d38b56d9915e00430b71a8d3628e422fcfca2ea402bd338e8eee\",\n  \"newPassword\": \"NewPassword@123\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url-mv}}/xam/auth/reset-password/customer",
+									"host": [
+										"{{url-mv}}"
+									],
+									"path": [
+										"xam",
+										"auth",
+										"reset-password",
+										"customer"
+									]
+								},
+								"description": "Resets password using valid reset token"
+							},
+							"response": []
+						},
+						{
+							"name": "Logout Customer",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{access_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{url-mv}}/xam/auth/logout/customer",
+									"host": [
+										"{{url-mv}}"
+									],
+									"path": [
+										"xam",
+										"auth",
+										"logout",
+										"customer"
 									]
 								},
 								"description": "Revoke session tokens and clear cookies"
@@ -684,7 +1176,7 @@
 	"variable": [
 		{
 			"key": "url-mv",
-			"value": "http://210.89.44.183:3333",
+			"value": "http://localhost:3336",
 			"type": "string"
 		},
 		{
